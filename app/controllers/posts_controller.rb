@@ -4,7 +4,11 @@ class PostsController < ApplicationController
   # GET /posts
   # GET /posts.json
   def index
-    @posts =  Post.all
+    if params[:tag].present?
+      @posts = Post.tagged_with(params[:tag])
+    else
+      @posts = Post.all
+    end
   end
 
   # GET /posts/1
@@ -64,11 +68,12 @@ class PostsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_post
+      # debugger
       @post = Post.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def post_params
-      params.require(:post).permit(:name, :surname)
+      params.require(:post).permit(:name, :surname, :tag_list)
     end
 end
